@@ -1,0 +1,7 @@
+{
+    "editor.fontFamily": "Fira Code, Consolas, 'Courier New', monospace",
+    "editor.trimAutoWhitespace": true,
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": true,
+    "editor.formatOnType": true
+}

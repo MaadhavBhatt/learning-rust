@@ -10,7 +10,7 @@ const MAX_INVALID_ATTEMPTS: u8 = 3;
 fn main() {
     println!("Guess the number!");
 
-    let secret_number: u32 = rand::thread_rng().gen_range(1..=100);
+    let secret_number: u8 = rand::thread_rng().gen_range(1..=100);
     let mut valid_attempts: u8 = 0;
     let mut invalid_attempts: u8 = 0;
 
@@ -22,15 +22,15 @@ fn main() {
         io::stdin()
             .read_line(&mut guess)
             .expect("Failed to read line");
-
-        let guess: u32 = match guess.trim().parse() {
+        
+        let guess: u8 = match guess.trim().parse() {
             Ok(num) => {
-                increment_valid_attempts(&mut valid_attempts);
+                increment_valid_attempts(&mut valid_attempts, secret_number);
                 num
             }
             Err(_) => {
                 println!("Please enter a valid integer between 1 and 100 (inclusive).");
-                increment_invalid_attempts(&mut invalid_attempts);
+                increment_invalid_attempts(&mut invalid_attempts, secret_number);
                 continue;
             }
         };
@@ -38,32 +38,34 @@ fn main() {
         println!("You guessed: {guess}");
 
         match guess.cmp(&secret_number) {
-            Ordering::Less => println!("Too small!"),
-            Ordering::Greater => println!("Too big!"),
+            Ordering::Less => println!("Too small!\n"),
+            Ordering::Greater => println!("Too big!\n"),
             Ordering::Equal => {
-                println!("You win! The secret number was {secret_number}.");
+                println!(
+                    "You win! The secret number was {secret_number} and you guessed it in {valid_attempts} attempts.\nThanks for playing!"
+                );
                 break;
             }
         }
     }
 }
 
-fn increment_attempts(attempts: &mut u8, max_attempts: u8, attempt_type: &str) {
+fn increment_attempts(attempts: &mut u8, max_attempts: u8, attempt_type: &str, secret_number: u8) {
     if *attempts < max_attempts - 1 {
         *attempts += 1;
     } else {
         println!(
-            "You've reached the maximum number of {} attempts ({}). Game over!\nThanks for playing!",
-            attempt_type, max_attempts
+            "You've reached the maximum number of {} attempts ({}). Game over! The secret number was {}.\nThanks for playing!",
+            attempt_type, max_attempts, secret_number
         );
         std::process::exit(0);
     }
 }
 
-fn increment_valid_attempts(attempts: &mut u8) {
-    increment_attempts(attempts, MAX_VALID_ATTEMPTS, "valid");
+fn increment_valid_attempts(attempts: &mut u8, secret_number: u8) {
+    increment_attempts(attempts, MAX_VALID_ATTEMPTS, "valid", secret_number);
 }
 
-fn increment_invalid_attempts(attempts: &mut u8) {
-    increment_attempts(attempts, MAX_INVALID_ATTEMPTS, "invalid");
+fn increment_invalid_attempts(attempts: &mut u8, secret_number: u8) {
+    increment_attempts(attempts, MAX_INVALID_ATTEMPTS, "invalid", secret_number);
 }

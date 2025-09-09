@@ -15,7 +15,14 @@ fn main() {
     let mut invalid_attempts: u8 = 0;
 
     loop {
-        println!("Please input your guess.");
+        let suffix = match valid_attempts + 1 {
+            1 => "st",
+            2 => "nd",
+            3 => "rd",
+            _ => "th",
+        };
+
+        println!("Please input your {}{} guess.", valid_attempts + 1, suffix);
 
         let mut guess = String::new();
 

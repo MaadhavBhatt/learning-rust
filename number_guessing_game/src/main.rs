@@ -48,13 +48,13 @@ fn main() {
     }
 }
 
-fn increment_attempts(attempts: &mut u8, max_attemps: u8, attempt_type: &str) {
-    if *attempts < max_attemps - 1 {
+fn increment_attempts(attempts: &mut u8, max_attempts: u8, attempt_type: &str) {
+    if *attempts < max_attempts - 1 {
         *attempts += 1;
     } else {
         println!(
             "You've reached the maximum number of {} attempts ({}). Game over!\nThanks for playing!",
-            attempt_type, max_attemps
+            attempt_type, max_attempts
         );
         std::process::exit(0);
     }

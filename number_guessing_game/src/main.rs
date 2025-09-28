@@ -112,3 +112,22 @@ fn is_prime(n: u8) -> bool {
     }
     true
 }
+
+fn mines_map(x: u8, guessed_numbers: &[u8]) -> f64 {
+    // Maps a number to a value between 0 and 1 based on its primality.
+    // Prime numbers return values closer to 1, while composite numbers return values closer to
+    // 0. If the number has been guessed before, it returns 1 (indicating an explosion).
+    // The number 1 is treated as prime for this mapping.
+    let x = x as f64;
+
+    if x <= 1.0 {
+        return 0.9;
+    }
+    if is_prime(x as u8) {
+        return 0.9;
+    } else if guessed_numbers.contains(&(x as u8)) {
+        return 1.0;
+    } else {
+        return 0.1;
+    }
+}

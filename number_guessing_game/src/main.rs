@@ -94,3 +94,40 @@ fn shift_secret_number(current_secret_number: &mut u8, valid_attempts: u8) {
     let shifted_number = *current_secret_number as i8 + shift;
     *current_secret_number = shifted_number.clamp(1, 100) as u8;
 }
+
+fn is_prime(n: u8) -> bool {
+    if n <= 1 {
+        return false;
+    }
+    if n % 2 == 0 && n != 2 {
+        return false;
+    }
+    if n == 2 {
+        return true;
+    }
+    for i in (3..=((n as f64).sqrt() as u8)).step_by(2) {
+        if n % i == 0 {
+            return false;
+        }
+    }
+    true
+}
+
+fn mines_map(x: u8, guessed_numbers: &[u8]) -> f64 {
+    // Maps a number to a value between 0 and 1 based on its primality.
+    // Prime numbers return values closer to 1, while composite numbers return values closer to
+    // 0. If the number has been guessed before, it returns 1 (indicating an explosion).
+    // The number 1 is treated as prime for this mapping.
+    let x = x as f64;
+
+    if x <= 1.0 {
+        return 0.9;
+    }
+    if is_prime(x as u8) {
+        return 0.9;
+    } else if guessed_numbers.contains(&(x as u8)) {
+        return 1.0;
+    } else {
+        return 0.1;
+    }
+}

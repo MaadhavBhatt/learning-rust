@@ -94,3 +94,21 @@ fn shift_secret_number(current_secret_number: &mut u8, valid_attempts: u8) {
     let shifted_number = *current_secret_number as i8 + shift;
     *current_secret_number = shifted_number.clamp(1, 100) as u8;
 }
+
+fn is_prime(n: u8) -> bool {
+    if n <= 1 {
+        return false;
+    }
+    if n % 2 == 0 && n != 2 {
+        return false;
+    }
+    if n == 2 {
+        return true;
+    }
+    for i in (3..=((n as f64).sqrt() as u8)).step_by(2) {
+        if n % i == 0 {
+            return false;
+        }
+    }
+    true
+}
